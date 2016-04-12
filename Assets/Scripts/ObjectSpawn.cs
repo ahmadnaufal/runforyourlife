@@ -8,8 +8,7 @@ public class ObjectSpawn : MonoBehaviour {
 	public GameObject gameStatus;
 
 	float timeElapsed = 0;
-	float spawnCycle = 1.3333f;
-	bool spawnReady = true;
+	float spawnCycle = 1f;
 
 	// Use this for initialization
 	void Start () {
@@ -25,7 +24,8 @@ public class ObjectSpawn : MonoBehaviour {
 		timeElapsed += Time.deltaTime;
 		if (timeElapsed > spawnCycle) {
 			GameObject temp;
-			if (spawnReady) {
+			int spawnReady = Random.Range (0, 6);
+			if (spawnReady > 0) {
 				temp = (GameObject)Instantiate (enemy);
 				Vector3 position = temp.transform.position;
 				temp.transform.position = new Vector3 (Random.Range (-3, 4), position.y, position.z);
@@ -36,7 +36,6 @@ public class ObjectSpawn : MonoBehaviour {
 			}
 
 			timeElapsed -= spawnCycle;
-			spawnReady = !spawnReady;
 		}
 	}
 }

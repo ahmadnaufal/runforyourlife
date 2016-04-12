@@ -21,7 +21,6 @@ public class FullWidthObstacleSpawn : MonoBehaviour {
 			return;
 
 		spawnCycle = Random.Range (5, 8);
-		Debug.Log (spawnCycle);
 		timeElapsed += Time.deltaTime;
 		if (timeElapsed > spawnCycle) {
 			GameObject temp;

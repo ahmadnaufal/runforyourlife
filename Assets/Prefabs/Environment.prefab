@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3319346}
   - 65: {fileID: 6511376}
   - 23: {fileID: 2333950}
+  - 114: {fileID: 11427142}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -44,6 +45,7 @@ GameObject:
   - 33: {fileID: 3388832}
   - 65: {fileID: 6571126}
   - 23: {fileID: 2358050}
+  - 114: {fileID: 11406416}
   m_Layer: 0
   m_Name: Wall (1)
   m_TagString: Obstacle
@@ -62,6 +64,7 @@ GameObject:
   - 33: {fileID: 3336822}
   - 65: {fileID: 6533398}
   - 23: {fileID: 2357824}
+  - 114: {fileID: 11426640}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Obstacle
@@ -255,6 +258,42 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11406416
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 176748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c988f46753ac6bd4c8352bdfd86ff3c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameStatus: {fileID: 0}
+--- !u!114 &11426640
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 194820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c988f46753ac6bd4c8352bdfd86ff3c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameStatus: {fileID: 0}
+--- !u!114 &11427142
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 138518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c988f46753ac6bd4c8352bdfd86ff3c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameStatus: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
