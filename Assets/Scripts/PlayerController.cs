@@ -8,10 +8,13 @@ public class PlayerController : MonoBehaviour {
 	float jumpSpeed = 6f;
 	float moveSpeed = 3f; 
 	bool isFalling = false;
-	bool animSwitch = false;
+	public bool isDead = false;
+
+	public GameObject gameStatus;
 
 	// Use this for initialization
 	void Start () {
+		gameStatus = GameObject.Find ("GameController");
 		playerRigidBody = GetComponent<Rigidbody> ();
 		anim = GetComponent<Animation> ();
 	}
@@ -19,7 +22,7 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (!isFalling && !animSwitch) {
+		if (!isFalling && !isDead) {
 			if (!anim.IsPlaying ("Attack"))
 				anim.Play ("Walk");
 			
@@ -42,10 +45,21 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision target) {
-		if (target.gameObject.tag == "Obstacle" && !animSwitch) {
-			animSwitch = true;
-			anim.Stop ("Walk");
-			anim.Play ("Dead");
+		if ((target.gameObject.tag == "Obstacle" || target.gameObject.tag == "Enemy") && !isDead) {
+			if (anim.IsPlaying ("Attack") && target.gameObject.tag == "Enemy")
+				Destroy (target.gameObject);
+			else {
+				isDead = true;
+				anim.Stop ("Walk");
+				anim.Play ("Dead");
+				gameStatus.GetComponent<GameStatus> ().isGameOver = true;
+			}
+		} else if (target.gameObject.tag == "Powerup" && !isDead) {
+			Vector3 position = target.gameObject.GetComponent<Rigidbody> ().position;
+			GameObject explosion = target.gameObject.GetComponent<EnemyController> ().explosionEffect;
+			GameObject explode = (GameObject) Instantiate(explosion, position, Quaternion.identity);
+			Destroy (target.gameObject);
+			Destroy (explode, 2);
 		}
 	}
 

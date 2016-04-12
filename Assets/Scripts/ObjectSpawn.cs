@@ -5,18 +5,23 @@ public class ObjectSpawn : MonoBehaviour {
 
 	public GameObject enemy;
 	public GameObject powerUp;
+	public GameObject gameStatus;
 
 	float timeElapsed = 0;
-	float spawnCycle = 2.5f;
+	float spawnCycle = 1.3333f;
 	bool spawnReady = true;
 
 	// Use this for initialization
 	void Start () {
-	
+		gameStatus = GameObject.Find ("GameController");
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		bool isGameOver = gameStatus.GetComponent<GameStatus> ().isGameOver;
+		if (isGameOver)
+			return;
+
 		timeElapsed += Time.deltaTime;
 		if (timeElapsed > spawnCycle) {
 			GameObject temp;
