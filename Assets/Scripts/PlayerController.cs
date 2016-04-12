@@ -5,12 +5,18 @@ public class PlayerController : MonoBehaviour {
 
 	Rigidbody playerRigidBody;
 	Animation anim;
-	float jumpSpeed = 6f;
+	public float jumpSpeed = 5f;
 	float moveSpeed = 3f; 
 	bool isFalling = false;
 	public bool isDead = false;
 
 	public GameObject gameStatus;
+
+	public AudioSource jumpSound;
+	public AudioSource deathSound;
+	public AudioSource powerupSound;
+	public AudioSource attackSound;
+	public AudioSource obstacleSound;
 
 	// Use this for initialization
 	void Start () {
@@ -22,14 +28,21 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (!isFalling && !isDead) {
+		if (!isDead) {
+
+			if (!isFalling) {
+				gameObject.GetComponent<AudioSource> ().enabled = true;
+
+				if (Input.GetKeyDown ("space") && !isFalling) {
+					playerRigidBody.velocity = jumpSpeed * Vector3.up;
+					jumpSound.Play ();
+					gameObject.GetComponent<AudioSource> ().enabled = false;
+					isFalling = true;
+				}
+			}
+
 			if (!anim.IsPlaying ("Attack"))
 				anim.Play ("Walk");
-			
-			if (Input.GetKeyDown ("space")) {
-				playerRigidBody.velocity = jumpSpeed * Vector3.up;
-				isFalling = true;
-			}
 
 			if (Input.GetKey ("a"))
 				playerRigidBody.transform.Translate (Vector3.left * moveSpeed * Time.deltaTime); 
@@ -37,34 +50,44 @@ public class PlayerController : MonoBehaviour {
 			if (Input.GetKey ("d"))
 				playerRigidBody.transform.Translate (Vector3.right * moveSpeed * Time.deltaTime);
 
-			if (Input.GetKey ("w")) {
+			if (Input.GetKeyDown ("w")) {
 				anim.Play ("Attack");
+				attackSound.Play ();
 			}
 				
+		} else if (isFalling || isDead) {
+			gameObject.GetComponent<AudioSource> ().enabled = false;
 		}
 	}
 
 	void OnCollisionEnter(Collision target) {
 		if ((target.gameObject.tag == "Obstacle" || target.gameObject.tag == "Enemy") && !isDead) {
-			if (anim.IsPlaying ("Attack") && target.gameObject.tag == "Enemy")
+			if (anim.IsPlaying ("Attack") && target.gameObject.tag == "Enemy") {
+				obstacleSound.Play ();
+				AddScore (10);
 				Destroy (target.gameObject);
-			else {
+			} else {
 				isDead = true;
 				anim.Stop ("Walk");
 				anim.Play ("Dead");
+				deathSound.Play ();
 				gameStatus.GetComponent<GameStatus> ().isGameOver = true;
 			}
 		} else if (target.gameObject.tag == "Powerup" && !isDead) {
 			Vector3 position = target.gameObject.GetComponent<Rigidbody> ().position;
 			GameObject explosion = target.gameObject.GetComponent<EnemyController> ().explosionEffect;
-			GameObject explode = (GameObject) Instantiate(explosion, position, Quaternion.identity);
+			GameObject explode = (GameObject)Instantiate (explosion, position, Quaternion.identity);
 			Destroy (target.gameObject);
+			powerupSound.Play ();
+			AddScore (20);
 			Destroy (explode, 2);
+		} else if (target.gameObject.name == "Ground") {
+			isFalling = false;
 		}
 	}
 
-	void OnCollisionStay(Collision collisionInfo) {
-		isFalling = false;
+	void AddScore(int extraScore) {
+		gameStatus.GetComponent<GameStatus> ().score += extraScore;
 	}
 		
 }
