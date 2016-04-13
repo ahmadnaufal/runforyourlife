@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
@@ -6,13 +7,20 @@ public class GameStatus : MonoBehaviour {
 
 	public bool isGameOver = false;
 	public int score;
+
+	public GameObject gameOverDialog;
+	public GameObject statusInterface;
+	GameObject myStatus;
+
 	float updateScore = 0.3f;
 	float timeElapsed = 0;
+	bool showDialog;
 
 	// Use this for initialization
 	void Start () {
 		score = 0;
-		Time.timeScale = 1;
+		showDialog = false;
+		myStatus = (GameObject)Instantiate (statusInterface);
 	}
 	
 	// Update is called once per frame
@@ -21,6 +29,15 @@ public class GameStatus : MonoBehaviour {
 			int bestScore = PlayerPrefs.GetInt ("BestScore");
 			if (score > bestScore)
 				PlayerPrefs.SetInt ("BestScore", score);
+
+			if (!showDialog) {
+				GameObject temp = (GameObject)Instantiate (gameOverDialog);
+				Text scoreText = temp.transform.GetChild (1).gameObject.GetComponent<Text> ();
+				scoreText.text = "Your Score: " + score;
+				Destroy (myStatus);
+
+				showDialog = true;
+			}
 		} else {
 			timeElapsed += Time.deltaTime;
 			if (timeElapsed > updateScore) {
@@ -29,28 +46,5 @@ public class GameStatus : MonoBehaviour {
 			}
 		}
 	}
-
-	void OnGUI() {
-		if (isGameOver) {
-
-			//display the final score
-			GUI.Box (new Rect (Screen.width / 4, Screen.height / 4, Screen.width / 2, Screen.height / 2), "GAME OVER\nYOUR SCORE: " + (int)score);
-
-			//restart the game on click
-			if (GUI.Button (new Rect (Screen.width / 4 + 10, Screen.height / 4 + Screen.height / 10 + 10, Screen.width / 2 - 20, Screen.height / 10), "RESTART")) {
-				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-			}
-
-			//load the main menu, which as of now has not been created
-			if (GUI.Button (new Rect (Screen.width / 4 + 10, Screen.height / 4 + 2 * Screen.height / 10 + 10, Screen.width / 2 - 20, Screen.height / 10), "MAIN MENU")) {
-				SceneManager.LoadScene(0);
-			}
-
-			//exit the game
-			if (GUI.Button (new Rect (Screen.width / 4 + 10, Screen.height / 4 + 3 * Screen.height / 10 + 10, Screen.width / 2 - 20, Screen.height / 10), "EXIT GAME")) {
-				Application.Quit ();
-			}
-
-		}
-	}
+		
 }

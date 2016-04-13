@@ -8,7 +8,7 @@ public class ObjectSpawn : MonoBehaviour {
 	public GameObject gameStatus;
 
 	float timeElapsed = 0;
-	float spawnCycle = 1f;
+	float spawnCycle = 0.66f;
 
 	// Use this for initialization
 	void Start () {

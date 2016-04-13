@@ -14,7 +14,7 @@ public class DisplayMyScore : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		int currentScore = gameObject.GetComponentInParent<GameStatus> ().score;
+		int currentScore = GameObject.Find ("GameController").GetComponentInParent<GameStatus> ().score;
 		scoretext.text = "Your Score\n" + currentScore;
 	}
 }
